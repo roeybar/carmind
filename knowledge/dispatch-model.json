@@ -1,0 +1,12 @@
+{"_meta": {"note": "Invented dispatch model for the fictional town of Fernhollow. The first rule whose status matches and whose zone matches or is null wins. Coverage never changes the action; it only says who pays."},
+ "zones": ["town", "outskirts", "highway"],
+ "actions": ["none", "roadside_rescue", "tow_to_dealer", "dealer_appointment"],
+ "rules": [
+  {"status": "not_drivable", "zone": null, "action": "tow_to_dealer"},
+  {"status": "unsupported", "zone": null, "action": "roadside_rescue"},
+  {"status": "unclear", "zone": null, "action": "roadside_rescue"},
+  {"status": "drivable_caution", "zone": "highway", "action": "roadside_rescue"},
+  {"status": "drivable_caution", "zone": null, "action": "dealer_appointment"},
+  {"status": "drivable", "zone": null, "action": "none"}],
+ "providers": {"roadside_rescue": "Fernhollow Roadside Help", "tow_to_dealer": "Hollow Valley Towing", "dealer_appointment": "Fernhollow Motor Works"},
+ "dealer": "Fernhollow Motor Works"}
