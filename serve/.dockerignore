@@ -1,0 +1,4 @@
+tests/
+data/
+test-output.txt
+**/__pycache__/

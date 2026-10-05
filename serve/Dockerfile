@@ -1,0 +1,14 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt && pip check
+
+COPY app/ ./app/
+
+ENV CARMIND_KB_DIR=/kb PYTHONPATH=/app PYTHONDONTWRITEBYTECODE=1
+
+EXPOSE 7600
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "7600"]
