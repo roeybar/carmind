@@ -1,0 +1,13 @@
+{
+  "_meta": {
+    "note": "Context rules (docs/resolution-order.md, step 2). Playbook content, written by hand. A rule fires when every flag in when_flags is on the request; when_symptom, if set, limits it to one indicator id. Rules can only make a verdict more cautious."
+  },
+  "context_rules": [
+    {
+      "id": "repeat-problem-tow",
+      "when_flags": ["repeat_problem"],
+      "then": "tow",
+      "rationale_en": "The same problem came back: tow the car instead of attempting a field fix."
+    }
+  ]
+}

@@ -1,0 +1,189 @@
+{
+  "_meta": {
+    "note": "acquired owner's manuals; generation_confirmed=false until a human verifies model+generation match. Extraction must skip unconfirmed."
+  },
+  "manuals": [
+    {
+      "make": "BYD",
+      "model": "Atto 3",
+      "generation": "2022-2025 EU LHD",
+      "lang": "en",
+      "url": "https://www.bydauto.nl/content/uploads/2025/05/BYDATTO32025OwnersManual-Left-handDrive-EN-240725-gecomprimeerd.pdf",
+      "path": "manuals_in/BYD/BYD_Atto_3_2022_2025_EU_LHD.pdf",
+      "bytes": 2192134,
+      "sha256": "3fa7d0f4544213e1d6c317f79ccbe18ba7b0c3d5156ac1444156108fa6bcefdf",
+      "pages_est": 212,
+      "generation_confirmed": false
+    },
+    {
+      "make": "Peugeot",
+      "model": "2008",
+      "generation": "2nd gen P24 2019+ ed01-20",
+      "lang": "en",
+      "url": "https://public.servicebox.peugeot.com/APddb/modeles/2008.p2/eGuide_p24_ed01-20/pdfs/9999_9999_402_en-GB.pdf",
+      "path": "manuals_in/Peugeot/Peugeot_2008_2nd_gen_P24_2019_ed01_20.pdf",
+      "bytes": 7740241,
+      "sha256": "fc3a36c33af4fc18659c2c8ecf4d71905b50e03a5e5405c9584cb56b19276f46",
+      "pages_est": 260,
+      "generation_confirmed": false
+    },
+    {
+      "make": "Kia",
+      "model": "Picanto",
+      "generation": "3rd gen JA facelift MY24",
+      "lang": "en",
+      "url": "https://www.kia.com/content/dam/kwcms/au/en/files/owners-manuals/picanto/kia-picanto-owners-manual-my24.pdf",
+      "path": "manuals_in/Kia/Kia_Picanto_3rd_gen_JA_facelift_MY24.pdf",
+      "bytes": 7930005,
+      "sha256": "84ae9a09ee1c72ceeca43f0125cf08797b25211f908984ea56374e898fd771c1",
+      "pages_est": 464,
+      "generation_confirmed": false
+    },
+    {
+      "make": "Skoda",
+      "model": "Kamiq",
+      "generation": "NW 2019+ (Skoda GAS platform sheet)",
+      "lang": "en",
+      "url": "https://s3cf792cad773e861.jimcontent.com/download/version/1612601896/module/15688223522/name/Skoda%20Kamiq%20Owner's%20Manual.pdf",
+      "path": "manuals_in/Skoda/Skoda_Kamiq_NW_2019_Skoda_GAS_platfo.pdf",
+      "bytes": 7121150,
+      "sha256": "979e8c607180d5892743a2ca9f5a8857b11e7b8689edbdd7f81b1611b11de762",
+      "pages_est": 194,
+      "generation_confirmed": true,
+      "manual_id": "skoda_kamiq_nw2019_gas",
+      "verified_note": "content confirmed: Skoda Kamiq NW owner's manual, indicator overview pp.13-14 (PDF idx), printed->PDF offset +2"
+    },
+    {
+      "make": "Skoda",
+      "model": "Octavia",
+      "generation": "A8/NX 2020+ (Skoda mHEV/hybrid + gas)",
+      "lang": "en",
+      "url": "https://s3cf792cad773e861.jimcontent.com/download/version/1612601956/module/15688227922/name/Skoda%20New%20Octavia%20Owner's%20Manual.pdf",
+      "path": "manuals_in/Skoda/Skoda_Octavia_A8_NX_2020_Skoda_mHEV_hy.pdf",
+      "bytes": 6567955,
+      "sha256": "54a4bf0634f581421a78f9deb4ef8e5c5cdafce4f83c37fd00330b7dd75b110f",
+      "pages_est": 197,
+      "generation_confirmed": false
+    },
+    {
+      "make": "Kia",
+      "model": "Niro",
+      "generation": "e-Niro EV full manual (Kia electrified ref)",
+      "lang": "en",
+      "url": "https://www.kia.com/content/dam/kwcms/kme/fi/fi/assets/contents/service/service-care/help-books/english/Kia-e-Niro-English-owners-manual.pdf",
+      "path": "manuals_in/Kia/Kia_Niro_e_Niro_EV_full_manual_Ki.pdf",
+      "bytes": 14340664,
+      "sha256": "826f6c063a035335473aab6f7f42b1c2f61808b6186eba3de572de88102b9cb7",
+      "pages_est": 574,
+      "generation_confirmed": false
+    },
+    {
+      "make": "Seat",
+      "model": "Arona",
+      "generation": "MY20 (Seat GAS platform sheet)",
+      "lang": "en",
+      "url": "https://www.seat.com/datamanual-manual/arona/my20_w48/en-uk/ARONA_11_19_EN.pdf",
+      "path": "manuals_in/Seat/Seat_Arona_MY20_Seat_GAS_platform_s.pdf",
+      "bytes": 8064869,
+      "sha256": "453f2f977690a16513df12fbfa9cb04c4bbf22f214cc0d52bc0ba9b443874bd6",
+      "pages_est": 372,
+      "generation_confirmed": false
+    },
+    {
+      "make": "Hyundai",
+      "model": "Tucson",
+      "generation": "NX4 2021+ (Hyundai GAS platform sheet)",
+      "lang": "en",
+      "url": "https://www.hyundai.com/content/dam/hyundai/in/en/data/connect-to-service/owners-manual/pc/Tucson.pdf",
+      "path": "manuals_in/Hyundai/Hyundai_Tucson_NX4_2021_Hyundai_GAS_pla.pdf",
+      "bytes": 7149144,
+      "sha256": "af36aec13e418e65b325d37ce2286c06c4f3fafc45cea3d749f8d584ab77f705",
+      "pages_est": 555,
+      "generation_confirmed": false
+    },
+    {
+      "make": "Citroen",
+      "model": "C5 Aircross",
+      "generation": "C84 ed01-22 (Citroen GAS platform sheet)",
+      "lang": "en",
+      "url": "https://service.citroen.com/ACddb/modeles/c5ac.c8/eGuide_c84_ed01-22_dag/pdfs/9999_9999_431_en-GB.pdf",
+      "path": "manuals_in/Citroen/Citroen_C5_Aircross_C84_ed01_22_Citroen_GAS_.pdf",
+      "bytes": 7743419,
+      "sha256": "540e046c4b7f875450d64d40db4a432849438abe39deca886c23d4f6d8bb2f1f",
+      "pages_est": 276,
+      "generation_confirmed": false
+    },
+    {
+      "make": "Hyundai",
+      "model": "Ioniq",
+      "generation": "AE Ioniq Hybrid (Hyundai HYBRID platform sheet)",
+      "lang": "en",
+      "url": "https://www.hyundai.com/content/dam/hyundai/in/en/data/connect-to-service/owners-manual/ioniq.pdf",
+      "path": "manuals_in/Hyundai/Hyundai_Ioniq_AE_Ioniq_Hybrid_Hyundai_.pdf",
+      "bytes": 7437604,
+      "sha256": "3f561ed3c135610c726beca52b73253a61c22aafdd57af736076af424d2bb6f6",
+      "pages_est": 568,
+      "generation_confirmed": false
+    },
+    {
+      "make": "Opel",
+      "model": "Frontera",
+      "generation": "2024 mHEV (Opel HYBRID platform sheet)",
+      "lang": "en",
+      "url": "https://public-servicebox.opel.com/OVddb/OV/en_GB/Frontera/2024_2029/2024_06/manual_user/OFRONCO2406en_2_online.pdf",
+      "path": "manuals_in/Opel/Opel_Frontera_2024_mHEV_Opel_HYBRID_pl.pdf",
+      "bytes": 15732442,
+      "sha256": "d51e6110051415f4b53261923564d08a1770d4b5a3fcba660110a5f0dd4d3e8a",
+      "pages_est": 192,
+      "generation_confirmed": false
+    },
+    {
+      "make": "Dacia",
+      "model": "Sandero",
+      "generation": "Sandero III 2021+ (Dacia GAS platform sheet)",
+      "lang": "en",
+      "url": "https://www.sandero2021.it/docs/Sandero-III_User_manual_ENG.pdf",
+      "path": "manuals_in/Dacia/Dacia_Sandero_Sandero_III_2021_Dacia_G.pdf",
+      "bytes": 7164469,
+      "sha256": "dc80d5f0c834b91db944aa2ba2109c9fde66fc3a05246e35977d86024db11901",
+      "pages_est": 352,
+      "generation_confirmed": false
+    },
+    {
+      "make": "Nissan",
+      "model": "Sentra",
+      "generation": "B18 ~2020 (Nissan GAS platform sheet)",
+      "lang": "en",
+      "url": "https://www.nissanusa.com/content/dam/Nissan/us/manuals-and-guides/sentra/2019/2019-Nissan-Sentra-owner-manual.pdf",
+      "path": "manuals_in/Nissan/Nissan_Sentra_B18_2020_Nissan_GAS_plat.pdf",
+      "bytes": 6073490,
+      "sha256": "3283fba39ee273e45244c6f7c7d896f069cef66d49117f52752f97915fd420c3",
+      "pages_est": 461,
+      "generation_confirmed": false
+    },
+    {
+      "make": "Toyota",
+      "model": "Corolla",
+      "generation": "Corolla Hybrid E210 (Toyota HYBRID, Hebrew)",
+      "lang": "he",
+      "url": "https://www.gaspro.co.il/wp-content/uploads/2021/05/corolla.pdf",
+      "path": "manuals_in/Toyota/Toyota_Corolla_Corolla_Hybrid_E210_Toyo.pdf",
+      "bytes": 3404296,
+      "sha256": "6e314151a9e3d47b61ff72f0fa42d990cd6a92ec811238f7519151f43c6498da",
+      "pages_est": 72,
+      "generation_confirmed": false
+    },
+    {
+      "make": "Renault",
+      "model": "Arkana",
+      "generation": "Arkana mHEV/E-Tech (Renault HYBRID platform sheet)",
+      "lang": "en",
+      "url": "https://www.user-manual.renault.com/sites/renault/files/ARKANA-1313-6_ENG.pdf",
+      "path": "manuals_in/Renault/Renault_Arkana_Arkana_mHEV_E_Tech_Renau.pdf",
+      "bytes": 11718787,
+      "sha256": "1af49416d7733e364fd640da4281be6d97dce4c7690a420402066798be016a6b",
+      "pages_est": 390,
+      "generation_confirmed": false
+    }
+  ]
+}
