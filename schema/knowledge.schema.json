@@ -1,0 +1,260 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "carmind vehicle knowledge base",
+  "description": "Draft canonical schema. Facts mined from OEM owner's manuals. No user data. Every indicator, procedure and manufacturer-based drivability gate carries provenance.",
+  "$defs": {
+    "drivetrain": { "enum": ["ice", "hybrid", "phev", "ev"] },
+    "color": { "enum": ["red", "amber", "green", "blue", "white"] },
+    "verdict": { "enum": ["drivable", "drivable_caution", "not_drivable"] },
+    "drivability_dimension": { "enum": ["braking", "acceleration", "steering", "other"], "description": "The universal trio, judged to the legal/safety threshold, not perfection: brakes to legal standard / accelerates without engine damage / steers within safety law. e.g. vibration only at 60km/h+ = steering dimension, drivable, schedule tire center (not tow)." },
+    "drivability_basis": { "enum": ["legal", "manufacturer"], "description": "Why the verdict holds. legal = Israeli roadworthiness law (vehicle-agnostic, no manual). manufacturer = manual-stated safety/damage. The fleet operator's commercial policy is not stored here; it layers on top and keys off damage_risk." },
+    "authority_ref": {
+      "type": "object",
+      "description": "Provenance for basis=legal facts: points at a regulation, not a manual.",
+      "required": ["authority", "citation"],
+      "properties": {
+        "authority": { "type": "string", "description": "e.g. 'IL traffic regulations'" },
+        "citation": { "type": "string" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["manual_id", "source_page"],
+      "properties": {
+        "manual_id": { "type": "string", "minLength": 1, "pattern": "\\S" },
+        "source_page": { "type": "integer", "minimum": 1 },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "vehicle": {
+      "type": "object",
+      "required": ["vehicle_id", "make", "model", "year", "drivetrain"],
+      "properties": {
+        "vehicle_id": { "type": "string" },
+        "make": { "type": "string" },
+        "model": { "type": "string" },
+        "year": { "type": "integer" },
+        "trim": { "type": "string" },
+        "drivetrain": { "$ref": "#/$defs/drivetrain" },
+        "market": { "type": "string", "default": "IL" },
+        "tire_provision": { "enum": ["full_spare", "space_saver", "inflation_kit", "none_exempt"], "description": "Car-type fact from manual. Resolves the spare gotcha: on inflation_kit/none_exempt cars a missing spare is EXPECTED, not a fault." },
+        "manual_refs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "manual_source": {
+      "type": "object",
+      "required": ["id", "filename", "sha256", "lang", "page_count"],
+      "properties": {
+        "id": { "type": "string" },
+        "filename": { "type": "string" },
+        "sha256": { "type": "string" },
+        "lang": { "type": "string", "default": "en" },
+        "page_count": { "type": "integer" },
+        "ingested_at": { "type": "string", "format": "date-time" },
+        "vehicle_scope": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "dashboard_indicator": {
+      "type": "object",
+      "required": ["id", "vehicle_scope", "color", "meaning_en", "provenance"],
+      "properties": {
+        "id": { "type": "string" },
+        "vehicle_scope": { "type": "array", "items": { "type": "string" } },
+        "std_name": { "type": "string", "description": "ISO/standard name, never translated" },
+        "name_en": { "type": "string" },
+        "name_he": { "type": "string" },
+        "icon_ref": { "type": "string", "description": "path to cropped icon image" },
+        "color": { "$ref": "#/$defs/color" },
+        "meaning_en": { "type": "string" },
+        "meaning_he": { "type": "string" },
+        "message_text": { "type": "string", "description": "verbatim dash message if any, e.g. 'Stop immediately, service vehicle'" },
+        "severity": { "enum": ["info", "caution", "urgent", "stop_now"] },
+        "hard_stop": { "type": "boolean", "description": "true = manufacturer hard stop (severity stop_now). Forces not_drivable and skips triage, so no field fix is attempted." },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      }
+    },
+    "symptom": {
+      "type": "object",
+      "required": ["id", "label_en", "category"],
+      "properties": {
+        "id": { "type": "string" },
+        "label_en": { "type": "string" },
+        "label_he": { "type": "string" },
+        "category": { "enum": ["wont_start", "wont_turn_off", "wont_lock", "warning_light", "noise", "fluid", "tire", "electrical", "drivetrain", "hvac", "glass", "keys", "other"] }
+      }
+    },
+    "fleet_procedure": {
+      "type": "object",
+      "description": "The fleet operator's own icon/symptom rulebook entry. It is their content: carmind hosts it and displays it first, attributed, but does not author or verify it. The manufacturer/legal assessment renders underneath as the deeper layer.",
+      "required": ["id", "trigger", "text_he", "owner"],
+      "properties": {
+        "id": { "type": "string" },
+        "trigger": { "type": "string", "description": "indicator_id or symptom_id" },
+        "vehicle_scope": { "type": "array", "items": { "type": "string" } },
+        "text_he": { "type": "string", "description": "The fleet's procedure text, verbatim" },
+        "text_en": { "type": "string" },
+        "owner": { "const": "fleet_operator", "description": "marks this as authored by the fleet operator: displayed first, never mined or edited by carmind" }
+      }
+    },
+    "context_flag": {
+      "description": "Per-car query-time inputs supplied by the fleet operator. Not stored by carmind: processed per request, never persisted. They modulate the decision; they are not car-type knowledge.",
+      "enum": ["repeat_problem", "recent_long_service", "near_service_interval", "fresh_handover", "no_pre_delivery_test", "after_service_hours"]
+    },
+    "context_rule": {
+      "type": "object",
+      "description": "Escalation modifier keyed on context flags (+ optional symptom). Expresses operator-risk judgment, e.g. 'repeat_problem -> tow, don't attempt field fix'. source=playbook (human-authored).",
+      "required": ["id", "when_flags", "then", "rationale_en"],
+      "properties": {
+        "id": { "type": "string" },
+        "when_flags": { "type": "array", "items": { "$ref": "#/$defs/context_flag" } },
+        "when_symptom": { "type": "string", "description": "optional symptom_id this rule is scoped to; empty = any" },
+        "then": { "enum": ["escalate", "tow", "raise_conservatism"], "description": "raise_conservatism = flip ambiguous/default branches toward not-driving" },
+        "rationale_en": { "type": "string" },
+        "rationale_he": { "type": "string" }
+      }
+    },
+    "triage_check": {
+      "type": "object",
+      "description": "Runs BEFORE the fault tree. Cheap yes/no the operator asks to resolve non-faults (fob battery, door ajar, broken start sequence). source=playbook means human-authored, no manual page.",
+      "required": ["id", "trigger", "order", "prompt_en", "on_confirm", "source"],
+      "properties": {
+        "id": { "type": "string" },
+        "trigger": { "type": "string", "description": "symptom_id this check fronts" },
+        "vehicle_scope": { "type": "array", "items": { "type": "string" }, "description": "empty = applies to all vehicles" },
+        "order": { "type": "integer", "description": "cheapest/most-likely first" },
+        "prompt_en": { "type": "string", "description": "question operator asks customer" },
+        "prompt_he": { "type": "string" },
+        "on_confirm": { "enum": ["resolved", "continue"], "description": "resolved = non-fault, stop here; continue = move to next check / fault tree" },
+        "resolution_en": { "type": "string", "description": "what to tell the customer if this resolves it" },
+        "resolution_he": { "type": "string" },
+        "source": { "enum": ["manual", "playbook"] },
+        "provenance": { "$ref": "#/$defs/provenance", "description": "required when source=manual" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "source": { "const": "manual" } } },
+          "then": { "required": ["provenance"] }
+        }
+      ]
+    },
+    "outcome": {
+      "type": "object",
+      "description": "Terminal of a diagnostic branch.",
+      "required": ["type"],
+      "properties": {
+        "type": { "enum": ["resolved_nonfault", "field_fix", "schedule", "procedure", "drivability", "indicator", "tow", "escalate"], "description": "field_fix = dispatch operator to fix at roadside (lamp/wipers); schedule = route maintenance for later (near interval); tow = recommend tow (the fleet operator executes it). Multiple cheap field_fix + schedule can bundle on one drivable car." },
+        "ref": { "type": "string", "description": "id of the procedure / drivability_gate / indicator this resolves to" },
+        "note_en": { "type": "string" },
+        "note_he": { "type": "string" }
+      }
+    },
+    "diagnostic_node": {
+      "type": "object",
+      "required": ["id", "question_en", "discriminator", "branches", "default_branch"],
+      "properties": {
+        "id": { "type": "string" },
+        "question_en": { "type": "string", "description": "what the operator asks the customer" },
+        "question_he": { "type": "string" },
+        "discriminator": { "type": "string", "description": "what this node is establishing, e.g. 'when does the wobble occur', 'sound character'" },
+        "branches": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["match_en"],
+            "properties": {
+              "match_en": { "type": "string", "description": "the answer this branch matches, e.g. 'high-pitched squeal'" },
+              "match_he": { "type": "string" },
+              "next_node": { "type": "string" },
+              "outcome": { "$ref": "#/$defs/outcome" }
+            }
+          }
+        },
+        "default_branch": {
+          "$ref": "#/$defs/outcome",
+          "description": "taken when the customer can't cleanly answer. On a high-liability tree this has to be conservative (escalate / not_drivable), never a 'probably fine' resolution."
+        }
+      }
+    },
+    "diagnostic_tree": {
+      "type": "object",
+      "description": "Branching diagnostic for symptoms that fork on discriminating questions (e.g. braking vibration). Distinct from the linear triage_check chain.",
+      "required": ["id", "trigger", "liability_tier", "root_node", "nodes"],
+      "properties": {
+        "id": { "type": "string" },
+        "trigger": { "type": "string", "description": "symptom_id" },
+        "vehicle_scope": { "type": "array", "items": { "type": "string" } },
+        "liability_tier": { "enum": ["standard", "high"], "description": "high = braking, steering, anything where a wrong 'fine' is a safety call. Forces conservative default_branch + human sign-off." },
+        "root_node": { "type": "string" },
+        "nodes": { "type": "array", "items": { "$ref": "#/$defs/diagnostic_node" } },
+        "source": { "enum": ["manual", "playbook"] },
+        "signed_off": { "type": "boolean", "description": "high-liability trees require explicit human sign-off before they can be served" }
+      }
+    },
+    "procedure": {
+      "type": "object",
+      "required": ["id", "vehicle_scope", "trigger", "steps", "operator_solvable", "provenance"],
+      "properties": {
+        "id": { "type": "string" },
+        "vehicle_scope": { "type": "array", "items": { "type": "string" } },
+        "trigger": { "type": "string", "description": "symptom_id or indicator_id" },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["order", "instruction_en"],
+            "properties": {
+              "order": { "type": "integer" },
+              "instruction_en": { "type": "string" },
+              "instruction_he": { "type": "string" },
+              "caution": { "type": "string" }
+            }
+          }
+        },
+        "requires": { "type": "array", "items": { "enum": ["code", "fob", "tool", "second_person"] } },
+        "operator_solvable": { "type": "boolean" },
+        "provenance": { "$ref": "#/$defs/provenance" }
+      }
+    },
+    "drivability_gate": {
+      "type": "object",
+      "description": "Safety-critical; needs a strict second-pass verification. Three independent axes: legal roadworthiness, manufacturer/mechanical safety, and damage_risk (the hook the fleet operator's commercial tow policy keys off; that policy itself is not stored here).",
+      "required": ["id", "vehicle_scope", "condition", "verdict", "basis", "rationale_en"],
+      "properties": {
+        "id": { "type": "string" },
+        "vehicle_scope": { "type": "array", "items": { "type": "string" }, "description": "empty = applies to all vehicles (typical for basis=legal)" },
+        "condition": { "type": "string", "description": "e.g. 'engine warning light + reduced power / limp mode' or 'broken mirror glass (reflective surface), housing alone does not qualify'" },
+        "verdict": { "$ref": "#/$defs/verdict" },
+        "basis": { "$ref": "#/$defs/drivability_basis" },
+        "damage_risk": { "type": "boolean", "description": "true = continued driving compounds the fault/repair cost even if the car physically moves. The hook the fleet operator's fleet-protection policy reads. Independent of legality." },
+        "dimension": { "$ref": "#/$defs/drivability_dimension" },
+        "rationale_en": { "type": "string" },
+        "rationale_he": { "type": "string" },
+        "provenance": { "$ref": "#/$defs/provenance", "description": "required when basis=manufacturer" },
+        "authority_ref": { "$ref": "#/$defs/authority_ref", "description": "required when basis=legal" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "basis": { "const": "manufacturer" } } },
+          "then": { "required": ["provenance"] }
+        },
+        {
+          "if": { "properties": { "basis": { "const": "legal" } } },
+          "then": { "required": ["authority_ref"] }
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "vehicles": { "type": "array", "items": { "$ref": "#/$defs/vehicle" } },
+    "manuals": { "type": "array", "items": { "$ref": "#/$defs/manual_source" } },
+    "fleet_procedures": { "type": "array", "items": { "$ref": "#/$defs/fleet_procedure" } },
+    "indicators": { "type": "array", "items": { "$ref": "#/$defs/dashboard_indicator" } },
+    "symptoms": { "type": "array", "items": { "$ref": "#/$defs/symptom" } },
+    "triage_checks": { "type": "array", "items": { "$ref": "#/$defs/triage_check" } },
+    "context_rules": { "type": "array", "items": { "$ref": "#/$defs/context_rule" } },
+    "diagnostic_trees": { "type": "array", "items": { "$ref": "#/$defs/diagnostic_tree" } },
+    "procedures": { "type": "array", "items": { "$ref": "#/$defs/procedure" } },
+    "drivability_gates": { "type": "array", "items": { "$ref": "#/$defs/drivability_gate" } }
+  }
+}
