@@ -1,0 +1,40 @@
+{
+  "note": "Invented sample data for illustration only. Fernhollow and every business, road and phone number in this file are fictional (555 numbers). Not taken from any manual, playbook or real company. Not for use on real vehicles.",
+  "diagnostic_trees": [
+    {
+      "id": "fernhollow-braking-problem", "trigger": "brake-noise", "vehicle_scope": [], "liability_tier": "high",
+      "root_node": "brake-warning", "signed_off": false,
+      "nodes": [
+        {
+          "id": "brake-warning", "question_en": "Is a red brake warning light on, or does the brake pedal feel soft, spongy or sink towards the floor?",
+          "discriminator": "signs of brake system failure",
+          "branches": [
+            {"match_en": "yes", "outcome": {"type": "tow", "note_en": "Do not drive. Send Fernhollow Tow & Recovery (555-0147)."}},
+            {"match_en": "no", "next_node": "brake-stopping"}
+          ],
+          "default_branch": {"type": "tow", "note_en": "Do not drive. Send Fernhollow Tow & Recovery (555-0147)."}
+        },
+        {
+          "id": "brake-stopping", "question_en": "Does the car take noticeably longer to stop than usual, or has it failed to stop when expected?",
+          "discriminator": "loss of stopping power",
+          "branches": [
+            {"match_en": "yes", "outcome": {"type": "tow", "note_en": "Do not drive. Send Fernhollow Tow & Recovery (555-0147)."}},
+            {"match_en": "no", "next_node": "brake-symptom"}
+          ],
+          "default_branch": {"type": "tow", "note_en": "Do not drive. Send Fernhollow Tow & Recovery (555-0147)."}
+        },
+        {
+          "id": "brake-symptom", "question_en": "What do you notice when braking: a noise, the car pulling to one side, or a shake through the pedal or steering wheel?",
+          "discriminator": "character of the braking complaint",
+          "branches": [
+            {"match_en": "grinding, metal-on-metal noise", "outcome": {"type": "tow", "note_en": "Brakes may be worn through. Do not drive; Fernhollow Tow & Recovery (555-0147) takes the car to Kettlewick Garage."}},
+            {"match_en": "pulls clearly to one side when braking", "outcome": {"type": "tow", "note_en": "Braking is uneven. Do not drive; Fernhollow Tow & Recovery (555-0147) takes the car to Kettlewick Garage."}},
+            {"match_en": "light squeal only, stopping feels normal", "outcome": {"type": "schedule", "note_en": "Book a brake check at Kettlewick Garage (555-0128). Call back at once if the noise or pedal feel changes."}},
+            {"match_en": "shake or vibration under braking", "outcome": {"type": "escalate", "note_en": "Put the customer through to a Fernhollow fleet technician before any further driving."}}
+          ],
+          "default_branch": {"type": "escalate", "note_en": "Unclear braking complaint: do not advise driving; put the customer through to a Fernhollow fleet technician."}
+        }
+      ]
+    }
+  ]
+}

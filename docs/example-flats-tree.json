@@ -1,0 +1,59 @@
+{
+  "note": "Invented sample data for illustration only. Fernhollow and every business, road and phone number in this file are fictional (555 numbers). Not taken from any manual, playbook or real company. Not for use on real vehicles.",
+  "diagnostic_trees": [
+    {
+      "id": "fernhollow-flat-tyre", "trigger": "flat-puncture", "vehicle_scope": [], "liability_tier": "standard",
+      "root_node": "flat-safe-stop", "signed_off": false,
+      "nodes": [
+        {
+          "id": "flat-safe-stop", "question_en": "Is the car stopped clear of traffic on firm, level ground, with the parking brake on, hazard lights on and everyone out on the safe side?",
+          "discriminator": "is the stopping place safe to work in",
+          "branches": [
+            {"match_en": "yes, parked off the road on firm, level ground with the parking brake on", "next_node": "flat-damage"},
+            {"match_en": "no, still in a live lane, on a bend or on a fast road", "outcome": {"type": "tow", "note_en": "Do not change the wheel here. Keep everyone behind the barrier and send Fernhollow Tow & Recovery (555-0147)."}},
+            {"match_en": "soft, sloping or uneven ground, or the parking brake cannot be set", "outcome": {"type": "tow", "note_en": "Do not jack the car here. Send Fernhollow Tow & Recovery (555-0147)."}}
+          ],
+          "default_branch": {"type": "tow", "note_en": "Location unclear: treat it as unsafe and send Fernhollow Tow & Recovery (555-0147)."}
+        },
+        {
+          "id": "flat-damage", "question_en": "How many tyres are affected, and is there a cut or bulge in the sidewall or a bent rim?",
+          "discriminator": "extent of tyre and wheel damage",
+          "branches": [
+            {"match_en": "one tyre, puncture in the tread only", "next_node": "flat-provision"},
+            {"match_en": "two or more tyres", "outcome": {"type": "tow", "note_en": "One spare cannot cover two flats. Send Fernhollow Tow & Recovery (555-0147)."}},
+            {"match_en": "sidewall cut, bulge, blowout or bent rim", "outcome": {"type": "tow", "note_en": "Not repairable at the roadside. Send Fernhollow Tow & Recovery (555-0147)."}}
+          ],
+          "default_branch": {"type": "tow", "note_en": "Damage unclear: send Fernhollow Tow & Recovery (555-0147)."}
+        },
+        {
+          "id": "flat-provision", "question_en": "Check the vehicle record first: does this car carry a full spare, a space-saver spare or only an inflation kit?",
+          "discriminator": "tyre provision (car-type fact; a missing spare is expected on kit cars)",
+          "branches": [
+            {"match_en": "full spare", "outcome": {"type": "field_fix", "note_en": "Fit the spare, or send the Fernhollow roadside van if the customer cannot. Book the damaged tyre at Mossgate Tyre Bay (555-0163)."}},
+            {"match_en": "space-saver spare", "outcome": {"type": "field_fix", "note_en": "Fit the space-saver, keep to the speed limit printed on it, and drive straight to Mossgate Tyre Bay (555-0163)."}},
+            {"match_en": "inflation kit only", "next_node": "flat-sealant"}
+          ],
+          "default_branch": {"type": "escalate", "note_en": "Provision unknown: check the vehicle record before advising."}
+        },
+        {
+          "id": "flat-sealant", "question_en": "Is the hole in the tread (not the sidewall), small, and is the tyre still seated on the rim?",
+          "discriminator": "can the inflation kit seal this puncture",
+          "branches": [
+            {"match_en": "yes", "next_node": "flat-kit-check"},
+            {"match_en": "no, or not sure", "outcome": {"type": "tow", "note_en": "Send Fernhollow Tow & Recovery (555-0147)."}}
+          ],
+          "default_branch": {"type": "tow", "note_en": "Send Fernhollow Tow & Recovery (555-0147)."}
+        },
+        {
+          "id": "flat-kit-check", "question_en": "After using the inflation kit as its label instructs, did the tyre reach the pressure on the kit label and hold it at the re-check the label asks for?",
+          "discriminator": "did the kit repair hold",
+          "branches": [
+            {"match_en": "yes, reached and held the label pressure", "outcome": {"type": "field_fix", "note_en": "Drive gently to Mossgate Tyre Bay (555-0163)."}},
+            {"match_en": "no, did not reach it or is losing pressure", "outcome": {"type": "tow", "note_en": "Do not drive. Send Fernhollow Tow & Recovery (555-0147)."}}
+          ],
+          "default_branch": {"type": "tow", "note_en": "Do not drive. Send Fernhollow Tow & Recovery (555-0147)."}
+        }
+      ]
+    }
+  ]
+}
