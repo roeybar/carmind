@@ -1,0 +1,12 @@
+{"_meta": {"note": "Invented policy of a fictional car rental company in the fictional town of Fernhollow, written for the carmind demo. Not based on any real company."},
+ "company": "Aldente Cars Atlantis",
+ "coverage_levels": [
+  {"id": "basic", "name": "Basic", "pays_for": ["tow_to_dealer"]},
+  {"id": "standard", "name": "Standard", "pays_for": ["tow_to_dealer", "roadside_rescue"]},
+  {"id": "premium", "name": "Premium", "pays_for": ["tow_to_dealer", "roadside_rescue", "dealer_appointment"]}],
+ "procedures": {
+  "not_drivable": ["Tell the customer not to drive the car.", "Ask the customer to wait in a safe place away from traffic.", "Confirm the car's location and send the dispatch below.", "Log the call with the verdict and the dispatch."],
+  "drivable_warning": ["Read the carmind verdict to the customer.", "Arrange the dispatch below, if any.", "Tell the customer to call back if the light changes or another light comes on.", "Log the call with the verdict."],
+  "unclear_description": ["Ask the customer for the light's color, symbol and whether it is steady or flashing.", "Until the light is identified, treat the car as not drivable.", "Send the dispatch below so a technician can look at the car.", "Log the call."],
+  "unsupported_car": ["Tell the customer that this car is not covered by the carmind knowledge base.", "Do not give a driving verdict.", "Send the dispatch below so a technician can look at the car.", "Log the call."],
+  "after_hours": ["The dealer is closed: book any dealer visit for the next working day.", "Roadside rescue and towing run around the clock."]}}
