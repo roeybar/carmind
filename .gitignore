@@ -1,0 +1,10 @@
+manuals_in/**/*.pdf
+knowledge/icons/*.jpg
+data/
+.venv/
+__pycache__/
+*.pyc
+serve/data/
+
+# Local settings: never committed.
+.env
