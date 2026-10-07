@@ -1,0 +1,83 @@
+{
+  "_extraction": {
+    "platform_cell": "Skoda / gas",
+    "source_manual_id": "skoda_kamiq_nw2019_gas",
+    "source_sha256_prefix": "979e8c607180",
+    "extracted": "2026-07-01",
+    "method": "Proof extraction, hand-verified against the detail pages.",
+    "discipline": "severity/hard_stop derived from the stated action text, never invented. 'Stop driving!' => stop_now+hard_stop; 'emergency mode possible' => caution, hard_stop=false. color assigned from Skoda danger-tier convention + verbatim DANGER/WARNING headers (confidence encodes strength). source_page = PDF index (printed page + 2).",
+    "scope_note": "vehicle_scope 'skoda_gas' = the make-by-powertrain platform sheet; applies to Kamiq/Scala/Octavia(gas)/Fabia/Karoq per the shared-inventory finding.",
+    "coverage_note": "6 core safety-critical indicators as a proof slice; the full overview (pp.13-14) lists about 40, which are not extracted."
+  },
+  "indicators": [
+    {
+      "id": "skoda_gas.brake_fluid_low",
+      "vehicle_scope": ["skoda_gas"],
+      "std_name": "brake system warning (red)",
+      "name_en": "Brake fluid level too low",
+      "color": "red",
+      "meaning_en": "Brake fluid level is too low. Problems/faults with the brake system can extend braking distance; danger of brake failure.",
+      "severity": "stop_now",
+      "hard_stop": true,
+      "message_text": "Stop driving! Seek the help of a specialist garage.",
+      "provenance": { "manual_id": "skoda_kamiq_nw2019_gas", "source_page": 127, "confidence": 0.95 }
+    },
+    {
+      "id": "skoda_gas.brake_abs_fault",
+      "vehicle_scope": ["skoda_gas"],
+      "std_name": "brake + ABS warning (red)",
+      "name_en": "Brake system and anti-lock braking system faulty",
+      "color": "red",
+      "meaning_en": "Red brake symbol illuminates together with the ABS symbol - combined brake/ABS fault.",
+      "severity": "stop_now",
+      "hard_stop": true,
+      "message_text": "Stop driving! Seek the help of a specialist garage.",
+      "provenance": { "manual_id": "skoda_kamiq_nw2019_gas", "source_page": 128, "confidence": 0.95 }
+    },
+    {
+      "id": "skoda_gas.coolant_level_low",
+      "vehicle_scope": ["skoda_gas"],
+      "std_name": "coolant warning",
+      "name_en": "Coolant level too low",
+      "color": "red",
+      "meaning_en": "Coolant level too low (risk of engine/cooling-system damage). If it cannot be topped up sufficiently, or coolant is being lost, stop.",
+      "severity": "urgent",
+      "hard_stop": false,
+      "message_text": "If it is not possible to top up with sufficient coolant: Stop driving. Stop the engine and seek the help of a specialist garage.",
+      "provenance": { "manual_id": "skoda_kamiq_nw2019_gas", "source_page": 142, "confidence": 0.9 }
+    },
+    {
+      "id": "skoda_gas.engine_control_petrol",
+      "vehicle_scope": ["skoda_gas"],
+      "std_name": "engine electronics / check-engine (petrol)",
+      "name_en": "Petrol engine control faulty",
+      "color": "amber",
+      "meaning_en": "Petrol engine control fault. Driving in emergency (limp) mode is possible; a noticeable reduction in engine performance may occur.",
+      "severity": "caution",
+      "hard_stop": false,
+      "provenance": { "manual_id": "skoda_kamiq_nw2019_gas", "source_page": 142, "confidence": 0.9 }
+    },
+    {
+      "id": "skoda_gas.front_assist_collision_warning",
+      "vehicle_scope": ["skoda_gas"],
+      "std_name": "front assist / forward collision warning",
+      "name_en": "Front Assist - safety distance too small / collision warning",
+      "color": "amber",
+      "meaning_en": "Front Assist warns that the distance to the vehicle ahead is too small or a collision risk exists; may brake to help avoid a collision.",
+      "severity": "caution",
+      "hard_stop": false,
+      "provenance": { "manual_id": "skoda_kamiq_nw2019_gas", "source_page": 128, "confidence": 0.85 }
+    },
+    {
+      "id": "skoda_gas.esc_active",
+      "vehicle_scope": ["skoda_gas"],
+      "std_name": "electronic stability control (ESC)",
+      "name_en": "ESC engaged (flashing)",
+      "color": "amber",
+      "meaning_en": "Flashing indicates ESC is actively engaged (stabilising the vehicle). This is a status indication, not a fault.",
+      "severity": "info",
+      "hard_stop": false,
+      "provenance": { "manual_id": "skoda_kamiq_nw2019_gas", "source_page": 127, "confidence": 0.85 }
+    }
+  ]
+}
