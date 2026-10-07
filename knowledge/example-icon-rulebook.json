@@ -1,0 +1,70 @@
+{
+  "_meta": {
+    "title": "מדריך נורות אזהרה לדוגמה: משמעות הנורה והפעולה הנדרשת",
+    "title_en": "Example warning-light rulebook for the Aldente Cars Atlantis demo fleet: what the light means and what to do",
+    "owner": "example_fleet",
+    "source": "Synthetic example written for this repository; every entry is invented.",
+    "note": "The synthetic example rulebook stands in for a fleet's own rulebook layer. It is shown first in the reply, verbatim and attributed. Hebrew text is the display text. recovery_action is the rulebook's disposition; the carmind assessment is shown underneath it, not over it.",
+    "disposition_vocab": {
+      "טכנאי": "send a technician (dispatch action roadside_rescue)",
+      "גרר": "tow (dispatch action tow_to_dealer)",
+      "תיאום מוסך": "book a visit at the dealer (dispatch action dealer_appointment)"
+    },
+    "color_convention": "כתום = amber (caution), אדום = red (stop/urgent), מהבהב = flashing (elevated). Where amber and red call for different actions, the entry says so in its recovery text; the brake-fluid entry also carries color_variants."
+  },
+  "procedures": [
+    {
+      "id": "engine-epc",
+      "light_name_he": "נורת מנוע",
+      "icon_label": "check engine",
+      "explanation_he": "ייתכן שיש תקלה במערכת המנוע.",
+      "recovery_action_he": "אם הרכב מתנהג אחרת מהרגיל - גרר. אם לא - תיאום מוסך.",
+      "recovery_conditional": [
+        { "when": "driving behaviour changed", "action": "tow" },
+        { "when": "no change in driving behaviour", "action": "book a visit at the dealer" }
+      ]
+    },
+    {
+      "id": "coolant-level",
+      "light_name_he": "נורת נוזל קירור",
+      "icon_label": "coolant level",
+      "explanation_he": "מפלס נוזל הקירור נמוך.",
+      "recovery_action_he": "שליחת טכנאי להשלמת נוזל ובדיקת נזילה."
+    },
+    {
+      "id": "brake-fluid",
+      "light_name_he": "נורת בלמים",
+      "icon_label": "(!) brake",
+      "explanation_he": "תקלה אפשרית במערכת הבלמים או מפלס נוזל בלמים נמוך.",
+      "recovery_action_he": "אדום: גרר. כתום: תיאום מוסך.",
+      "color_variants": {
+        "red": { "action": "tow" },
+        "amber": { "action": "book a visit at the dealer" }
+      },
+      "hard_stop_hint": true
+    },
+    {
+      "id": "brake-abs",
+      "light_name_he": "נורת ABS",
+      "icon_label": "ABS",
+      "explanation_he": "תקלה אפשרית במערכת למניעת נעילת גלגלים.",
+      "recovery_action_he": "גרר, או תיאום מוסך לפי מצב הרכב."
+    },
+    {
+      "id": "driver-assist",
+      "light_name_he": "נורות מערכות סיוע לנהג (יציבות, התנגשות)",
+      "icon_label": "driver-assist icons (stability, collision)",
+      "explanation_he": "התראה של אחת ממערכות הסיוע לנהג. יש לשים לב לצבע הנורה.",
+      "recovery_action_he": "תיאום מוסך, או גרר אם הנורה אדומה.",
+      "note": "one entry covers the two driver-assist lights carmind matches here (stability, collision); the action depends on the light's color."
+    },
+    {
+      "id": "washer-fluid-low",
+      "light_name_he": "נורת נוזל שמשות",
+      "icon_label": "washer fluid",
+      "explanation_he": "מפלס נוזל השמשות נמוך.",
+      "recovery_action_he": "הסבר ללקוח כיצד להשלים נוזל.",
+      "note": "informational, not a fault."
+    }
+  ]
+}

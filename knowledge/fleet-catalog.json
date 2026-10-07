@@ -1,0 +1,149 @@
+{
+  "_meta": {
+    "purpose": "Makes carmind recognises in the request text: on the chat route with no identified vehicle, a make listed here other than Skoda gets the unsupported-vehicle reply, and with an identified car, on any route, naming a listed make other than the car's gets the mismatch reply (serve/README.md \"Vehicle resolution\" has the exact rules). The model names are listed for reference; carmind does not read them.",
+    "content": "The 20 best-selling new car models in Israel in 2025, from public sales data. This is not a fleet: units_2025 is the number of new vehicles of the model delivered in Israel in 2025, as published, and carmind does not use it.",
+    "data": "Israel Vehicle Importers Association (IVIA), new-vehicle deliveries, January-December 2025 (total market 293,591 vehicles)",
+    "sources": [
+      {
+        "name": "Cartube, \"שיא מסירות של כל הזמנים: מסירות רכב חדש בישראל סיכום 2025\" (ranking table with units)",
+        "url": "https://www.cartube.co.il/חדשות-רכב/שיא-מסירות-של-כל-הזמנים-מסירות-רכב-חדש-בישראל-סיכום-2025",
+        "period": "January-December 2025"
+      },
+      {
+        "name": "auto.co.il, \"מסירות 2025 - שיא חדש: מעל 293,000 מכוניות\" (attribution to IVIA)",
+        "url": "https://www.auto.co.il/articles/car-news/local-news/cars-sales-2025/",
+        "period": "January-December 2025"
+      },
+      {
+        "name": "Best Selling Cars Blog, \"Israel Full Year 2025\" (cross-check of the top of the ranking and the marketed names)",
+        "url": "https://bestsellingcarsblog.com/2026/01/israel-full-year-2025-jaecoo-7-takes-the-lead-chinese-at-29-7-share-peak-of-49-5-in-september/",
+        "period": "January-December 2025"
+      }
+    ],
+    "names": "English names as marketed in Israel. Cartube lists #10 as Song U and #12 as Yuan Plus; they are sold as BYD Seal U and BYD Atto 3.",
+    "distinct_models": 20,
+    "distinct_makes": 9
+  },
+  "models": [
+    {
+      "rank": 1,
+      "make": "Jaecoo",
+      "model": "7",
+      "units_2025": 15230
+    },
+    {
+      "rank": 2,
+      "make": "Hyundai",
+      "model": "Kona",
+      "units_2025": 11770
+    },
+    {
+      "rank": 3,
+      "make": "Toyota",
+      "model": "Corolla Cross",
+      "units_2025": 9002
+    },
+    {
+      "rank": 4,
+      "make": "Chery",
+      "model": "Tiggo 8 Pro",
+      "units_2025": 8187
+    },
+    {
+      "rank": 5,
+      "make": "Kia",
+      "model": "Picanto",
+      "units_2025": 8062
+    },
+    {
+      "rank": 6,
+      "make": "Toyota",
+      "model": "Yaris Cross",
+      "units_2025": 7885
+    },
+    {
+      "rank": 7,
+      "make": "Chery",
+      "model": "FX",
+      "units_2025": 7522
+    },
+    {
+      "rank": 8,
+      "make": "Toyota",
+      "model": "RAV4",
+      "units_2025": 7178
+    },
+    {
+      "rank": 9,
+      "make": "Hyundai",
+      "model": "Elantra",
+      "units_2025": 6072
+    },
+    {
+      "rank": 10,
+      "make": "BYD",
+      "model": "Seal U",
+      "units_2025": 5691
+    },
+    {
+      "rank": 11,
+      "make": "Hyundai",
+      "model": "Venue",
+      "units_2025": 5554
+    },
+    {
+      "rank": 12,
+      "make": "BYD",
+      "model": "Atto 3",
+      "units_2025": 5496
+    },
+    {
+      "rank": 13,
+      "make": "Skoda",
+      "model": "Octavia",
+      "units_2025": 5339
+    },
+    {
+      "rank": 14,
+      "make": "Kia",
+      "model": "Niro",
+      "units_2025": 5319
+    },
+    {
+      "rank": 15,
+      "make": "XPeng",
+      "model": "G6",
+      "units_2025": 4844
+    },
+    {
+      "rank": 16,
+      "make": "Chery",
+      "model": "Tiggo 7 Pro",
+      "units_2025": 4716
+    },
+    {
+      "rank": 17,
+      "make": "Mazda",
+      "model": "CX-5",
+      "units_2025": 4425
+    },
+    {
+      "rank": 18,
+      "make": "Skoda",
+      "model": "Kamiq",
+      "units_2025": 4354
+    },
+    {
+      "rank": 19,
+      "make": "Kia",
+      "model": "Sportage",
+      "units_2025": 4334
+    },
+    {
+      "rank": 20,
+      "make": "Hyundai",
+      "model": "Tucson",
+      "units_2025": 4297
+    }
+  ]
+}
