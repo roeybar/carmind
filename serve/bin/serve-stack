@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SERVE_DIR="$(dirname "$SCRIPT_DIR")"
+ROOT_DIR="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+COMPOSE="docker compose -f ${ROOT_DIR}/docker-compose.yml"
+PROFILES="--profile test --profile e2e --profile stress --profile tools"
+
+verb="${1:-help}"
+shift || true
+
+case "$verb" in
+    build)
+        ${COMPOSE} build app
+        ;;
+
+    up)
+        ${COMPOSE} up -d app mcp
+        ;;
+
+    down)
+        ${COMPOSE} ${PROFILES} down --remove-orphans
+        ;;
+
+    test)
+        # serve/tests only. Pass test paths relative to /app (tests/test_tools.py):
+        # Git Bash rewrites absolute container paths.
+        OUTPUT="${SERVE_DIR}/test-output.txt"
+        set +e
+        if [ "$#" -gt 0 ]; then
+            ${COMPOSE} --profile test run --rm test python -m pytest -p no:cacheprovider -v "$@" 2>&1 | tee "${OUTPUT}"
+            STATUS=${PIPESTATUS[0]}
+        else
+            ${COMPOSE} --profile test run --rm test 2>&1 | tee "${OUTPUT}"
+            STATUS=${PIPESTATUS[0]}
+        fi
+        set -e
+        echo "Full test output: ${OUTPUT}"
+        exit "${STATUS}"
+        ;;
+
+    tools-test)
+        # tools/ tests: a plain python image with git and curl.
+        ${COMPOSE} --profile tools run --rm tools-test
+        ;;
+
+    lint)
+        ${COMPOSE} --profile test run --rm lint ruff check --no-cache "$@" serve tools
+        ;;
+
+    probe)
+        ${COMPOSE} exec -T app python -m app.mcp_probe "$@"
+        ;;
+
+    e2e)
+        ${COMPOSE} up -d app mcp
+        ${COMPOSE} --profile e2e run --rm e2e
+        ${COMPOSE} --profile e2e run --rm ui-e2e
+        ;;
+
+    stress)
+        ${COMPOSE} up -d app mcp
+        ${COMPOSE} --profile stress run --rm stress
+        ;;
+
+    logs)
+        ${COMPOSE} logs -f
+        ;;
+
+    *)
+        echo "Usage: serve-stack {build|up|down|test [pytest args]|tools-test|lint [--fix]|probe|e2e|stress|logs}"
+        exit 1
+        ;;
+esac
