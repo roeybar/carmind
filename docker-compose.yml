@@ -1,7 +1,11 @@
 name: carmind
 
 x-carmind: &carmind
-  build: ./serve
+  build:
+    context: .
+    dockerfile: serve/Dockerfile
+    args:
+      DEV: "1"
   image: carmind:latest
   mem_limit: 512m
   environment: &carmind-env

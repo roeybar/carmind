@@ -26,6 +26,9 @@ from app.tools import field_given
 
 logger = logging.getLogger(__name__)
 
+# A short tag on the service's own error lines, so they can be picked out of a shared log.
+LOG_TAG = "220a2b39"
+
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 
 
@@ -35,7 +38,7 @@ async def lifespan(_app: FastAPI):
     yield
 
 
-app = FastAPI(title="carmind-serve", version="0.1.0", lifespan=lifespan)
+app = FastAPI(title="carmind-serve", version="1.0.0", lifespan=lifespan)
 app.include_router(ui.router)
 
 
@@ -44,7 +47,7 @@ async def _off_loop(fn, *args):
     try:
         return await run_in_threadpool(fn, *args)
     except Exception as exc:
-        logger.error("thread pool call failed: %s", type(exc).__name__)
+        logger.error("%s thread pool call failed: %s", LOG_TAG, type(exc).__name__)
         return fn(*args)
 
 
@@ -55,7 +58,7 @@ async def _handle(request: Request) -> JSONResponse:
         reply = await run_in_threadpool(answer, req)
         return JSONResponse({"reply": reply})
     except Exception as exc:
-        logger.error("request handling error: %s", type(exc).__name__)
+        logger.error("%s request handling error: %s", LOG_TAG, type(exc).__name__)
         try:
             parsed = json.loads(await request.body())
         except Exception:
@@ -63,7 +66,7 @@ async def _handle(request: Request) -> JSONResponse:
         try:
             reply = await _off_loop(_error_reply, parsed)
         except Exception as exc:
-            logger.error("error reply failed: %s", type(exc).__name__)
+            logger.error("%s error reply failed: %s", LOG_TAG, type(exc).__name__)
             reply = _static_error_reply(parsed)
         return JSONResponse({"reply": reply})
 
@@ -84,7 +87,7 @@ def _read_body(parsed) -> tuple:
         known = get_args(ContextFlag)
         flags = [f for f in raw_flags if isinstance(f, str) and f in known] if isinstance(raw_flags, list) else []
     except Exception:
-        logger.error("error reply: unreadable request body")
+        logger.error("%s error reply: unreadable request body", LOG_TAG)
     return lang, text, flags
 
 
@@ -156,7 +159,7 @@ async def _rejected(error: str, body) -> JSONResponse:
     try:
         out = await _off_loop(_rejection, error, body)
     except Exception as exc:
-        logger.error("rejection reply failed: %s", type(exc).__name__)
+        logger.error("%s rejection reply failed: %s", LOG_TAG, type(exc).__name__)
         out = {"error": error}
         problem = body.get("problem") if isinstance(body, dict) else None
         if isinstance(problem, str) and problem:
@@ -186,13 +189,13 @@ async def agent_route(request: Request) -> JSONResponse:
                                        agent.tools_from_env(), setup_error, req.caller_number, req.plate)
         return JSONResponse(result)
     except Exception as exc:
-        logger.error("agent error: %s", type(exc).__name__)
+        logger.error("%s agent error: %s", LOG_TAG, type(exc).__name__)
         text, status = compose_escalate("en-US", "error"), "unclear"
         flags = ["after_service_hours"] if req.after_hours else []
         try:
             stop = await _off_loop(stop_warning_or_fallback, req.problem, flags)
         except Exception as exc:
-            logger.error("stop check failed: %s", type(exc).__name__)
+            logger.error("%s stop check failed: %s", LOG_TAG, type(exc).__name__)
             stop = isinstance(req.problem, str) and req.problem != ""
         if stop:
             text, status = text + "\n\n" + stop_precaution("en-US"), "not_drivable"

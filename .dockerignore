@@ -1,0 +1,14 @@
+*
+!serve/requirements.txt
+!serve/requirements-dev.txt
+!serve/app
+!knowledge
+!schema
+knowledge/icons/*.jpg
+**/data
+**/__pycache__
+**/*.pyc
+**/.env
+**/.venv
+**/manuals_in
+**/test-output.txt

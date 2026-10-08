@@ -243,7 +243,7 @@ changes, and the severity shown is always the record's own. The shipped file has
 ## Knowledge mounts
 
 `CARMIND_KB_DIR` is the directory that contains `knowledge/`. In the container it is `/kb`
-(knowledge at `/kb/knowledge`, schema at `/kb/schema`), mounted read-only. Tests run from the
+(knowledge at `/kb/knowledge`, schema at `/kb/schema`): compose mounts them read-only, and the release image carries them, read-only for its user. Tests run from the
 repository set it to the repository root when it isn't already set.
 
 At startup the indicator records and context rules are validated against
