@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>carmind - call-center assistant demo</title>
+<style>
+  @font-face { font-family:'Assistant'; font-style:normal; font-display:swap; font-weight:300; src:url(/fonts/assistant-hebrew-300-normal.woff2) format('woff2'); unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F; }
+  @font-face { font-family:'Assistant'; font-style:normal; font-display:swap; font-weight:300; src:url(/fonts/assistant-latin-300-normal.woff2) format('woff2'); unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+  @font-face { font-family:'Assistant'; font-style:normal; font-display:swap; font-weight:400; src:url(/fonts/assistant-hebrew-400-normal.woff2) format('woff2'); unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F; }
+  @font-face { font-family:'Assistant'; font-style:normal; font-display:swap; font-weight:400; src:url(/fonts/assistant-latin-400-normal.woff2) format('woff2'); unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+  @font-face { font-family:'Assistant'; font-style:normal; font-display:swap; font-weight:500; src:url(/fonts/assistant-hebrew-500-normal.woff2) format('woff2'); unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F; }
+  @font-face { font-family:'Assistant'; font-style:normal; font-display:swap; font-weight:500; src:url(/fonts/assistant-latin-500-normal.woff2) format('woff2'); unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+  @font-face { font-family:'Assistant'; font-style:normal; font-display:swap; font-weight:600; src:url(/fonts/assistant-hebrew-600-normal.woff2) format('woff2'); unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F; }
+  @font-face { font-family:'Assistant'; font-style:normal; font-display:swap; font-weight:600; src:url(/fonts/assistant-latin-600-normal.woff2) format('woff2'); unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+  @font-face { font-family:'Assistant'; font-style:normal; font-display:swap; font-weight:700; src:url(/fonts/assistant-hebrew-700-normal.woff2) format('woff2'); unicode-range:U+0307-0308,U+0590-05FF,U+200C-2010,U+20AA,U+25CC,U+FB1D-FB4F; }
+  @font-face { font-family:'Assistant'; font-style:normal; font-display:swap; font-weight:700; src:url(/fonts/assistant-latin-700-normal.woff2) format('woff2'); unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+  @font-face { font-family:'Noto Sans Arabic'; font-style:normal; font-display:swap; font-weight:400; src:url(/fonts/noto-sans-arabic-arabic-400-normal.woff2) format('woff2'); unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC,U+102E0-102FB,U+10E60-10E7E,U+10EC2-10EC4,U+10EFC-10EFF,U+1EE00-1EE03,U+1EE05-1EE1F,U+1EE21-1EE22,U+1EE24,U+1EE27,U+1EE29-1EE32,U+1EE34-1EE37,U+1EE39,U+1EE3B,U+1EE42,U+1EE47,U+1EE49,U+1EE4B,U+1EE4D-1EE4F,U+1EE51-1EE52,U+1EE54,U+1EE57,U+1EE59,U+1EE5B,U+1EE5D,U+1EE5F,U+1EE61-1EE62,U+1EE64,U+1EE67-1EE6A,U+1EE6C-1EE72,U+1EE74-1EE77,U+1EE79-1EE7C,U+1EE7E,U+1EE80-1EE89,U+1EE8B-1EE9B,U+1EEA1-1EEA3,U+1EEA5-1EEA9,U+1EEAB-1EEBB,U+1EEF0-1EEF1; }
+  @font-face { font-family:'Noto Sans Arabic'; font-style:normal; font-display:swap; font-weight:600; src:url(/fonts/noto-sans-arabic-arabic-600-normal.woff2) format('woff2'); unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC,U+102E0-102FB,U+10E60-10E7E,U+10EC2-10EC4,U+10EFC-10EFF,U+1EE00-1EE03,U+1EE05-1EE1F,U+1EE21-1EE22,U+1EE24,U+1EE27,U+1EE29-1EE32,U+1EE34-1EE37,U+1EE39,U+1EE3B,U+1EE42,U+1EE47,U+1EE49,U+1EE4B,U+1EE4D-1EE4F,U+1EE51-1EE52,U+1EE54,U+1EE57,U+1EE59,U+1EE5B,U+1EE5D,U+1EE5F,U+1EE61-1EE62,U+1EE64,U+1EE67-1EE6A,U+1EE6C-1EE72,U+1EE74-1EE77,U+1EE79-1EE7C,U+1EE7E,U+1EE80-1EE89,U+1EE8B-1EE9B,U+1EEA1-1EEA3,U+1EEA5-1EEA9,U+1EEAB-1EEBB,U+1EEF0-1EEF1; }
+  @font-face { font-family:'IBM Plex Mono'; font-style:normal; font-display:swap; font-weight:400; src:url(/fonts/ibm-plex-mono-latin-400-normal.woff2) format('woff2'); unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+  @font-face { font-family:'IBM Plex Mono'; font-style:normal; font-display:swap; font-weight:500; src:url(/fonts/ibm-plex-mono-latin-500-normal.woff2) format('woff2'); unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+
+  :root { --primary:#0F766E; --dark:#1F2933; --record:#DB2777; --bg:#F5F6F8; --line:#E3E6EA; --ink:#1F2933; --muted:#7B8794; }
+  * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body { height:100%; margin:0; background:var(--bg); }
+  body { font-family:'Assistant','Noto Sans Arabic',system-ui,sans-serif; color:var(--ink); text-wrap:pretty; }
+  button, input, select, textarea { font:inherit; }
+  a { color:var(--primary); text-decoration:none; }
+  a:hover { color:var(--dark); }
+  #app { position:relative; display:flex; flex-direction:column; height:100dvh; overflow:hidden; }
+
+  header { display:flex; align-items:center; gap:12px; padding:14px 16px; padding-top:max(20px, env(safe-area-inset-top)); background:var(--dark); color:#fff; }
+  header .title { flex:1; min-width:0; }
+  header .title b { display:block; font-size:16px; font-weight:600; }
+  header .title span { font-size:11.5px; color:rgba(255,255,255,.62); font-family:'IBM Plex Mono',monospace; }
+  .icon-btn { display:grid; gap:4px; place-content:center; width:38px; height:38px; border:0; border-radius:11px; background:rgba(255,255,255,.12); cursor:pointer; }
+  .icon-btn i { display:block; width:17px; height:2px; border-radius:2px; background:#fff; }
+  .icon-btn i:last-child { width:11px; }
+  .ghost { padding:8px 12px; border:1px solid rgba(255,255,255,.22); border-radius:999px; background:transparent; color:#fff; font-size:12.5px; font-weight:600; cursor:pointer; }
+
+  main { flex:1; min-height:0; overflow-y:auto; padding:18px 16px 8px; display:flex; flex-direction:column; gap:14px; }
+  .empty { margin:auto; max-width:290px; text-align:center; padding-bottom:40px; }
+  .empty .mark { width:60px; height:60px; margin:0 auto 18px; border-radius:19px; background:#fff; border:1px solid var(--line); display:grid; place-items:center; }
+  .empty .mark span { width:13px; height:22px; border-radius:7px; background:var(--dark); }
+  .empty h2 { margin:0 0 8px; font-size:19px; font-weight:600; }
+  .empty p { margin:0; font-size:13.5px; line-height:1.55; color:#52606D; }
+
+  .row { display:flex; flex-direction:column; gap:5px; animation:fadeUp .18s ease-out; }
+  .row.user { align-items:flex-end; }
+  .row.assistant { align-items:flex-start; }
+  .bubble { max-width:84%; padding:12px 15px; font-size:14.5px; line-height:1.55; white-space:pre-wrap; }
+  .user .bubble { background:var(--primary); color:#fff; border-start-start-radius:17px; border-start-end-radius:17px; border-end-end-radius:5px; border-end-start-radius:17px; }
+  .assistant .bubble { background:#fff; border:1px solid var(--line); border-start-start-radius:17px; border-start-end-radius:17px; border-end-end-radius:17px; border-end-start-radius:5px; }
+  .meta { display:flex; align-items:center; gap:10px; font-size:10.5px; color:var(--muted); font-family:'IBM Plex Mono',monospace; }
+  .speak { display:flex; align-items:center; gap:6px; padding:4px 10px 4px 8px; border:1px solid var(--line); border-radius:999px; background:#fff; color:var(--primary); font-size:11.5px; font-weight:600; cursor:pointer; }
+  .speak .ico::before { content:"\1F508"; }
+  .typing { display:flex; gap:5px; align-self:flex-start; padding:12px 15px; background:#fff; border:1px solid var(--line); border-radius:17px 17px 17px 5px; }
+  .typing i { width:6px; height:6px; border-radius:50%; background:var(--primary); animation:blink 1s infinite; }
+  .typing i:nth-child(2) { animation-delay:.15s } .typing i:nth-child(3) { animation-delay:.3s }
+
+  .notice { margin:0 16px 8px; padding:10px 12px; border-radius:12px; background:#E6F4F2; border:1px solid #B7DFDA; color:#0B4F4A; font-size:12.5px; line-height:1.45; }
+
+  footer { position:relative; z-index:25; padding:10px 16px; padding-bottom:max(20px, env(safe-area-inset-bottom)); background:#fff; border-top:1px solid #E3E6EA; }
+  .compose { display:flex; align-items:flex-end; gap:10px; }
+  textarea { flex:1; resize:none; max-height:104px; padding:11px 14px; border:1px solid var(--line); border-radius:19px; background:#F8F9FB; font-size:14.5px; line-height:1.45; outline:none; }
+  textarea:focus { border-color:var(--primary); background:#fff; }
+  .send { width:44px; height:44px; border:0; border-radius:50%; background:var(--dark); color:#fff; font-size:17px; cursor:pointer; }
+  .send::before { content:"\2191"; }
+  .send:disabled { opacity:.45; cursor:default; }
+  .mic-wrap { display:flex; flex-direction:column; align-items:center; gap:9px; margin-top:10px; }
+  .mic-slot { position:relative; width:74px; height:74px; }
+  .mic { position:absolute; inset:0; border:0; border-radius:50%; background:var(--primary); box-shadow:0 6px 18px rgba(15,118,110,.32); cursor:pointer; display:grid; place-items:center; touch-action:none; user-select:none; transition:background .12s ease-out, transform .1s ease-out; }
+  .mic[data-live="1"] { background:var(--record); }
+  .mic:disabled { opacity:.45; box-shadow:none; cursor:default; }
+  .mic .stem { width:15px; height:26px; border-radius:8px; background:#fff; }
+  .mic .square { width:22px; height:22px; border-radius:4px; background:#fff; }
+  .lockcue { position:absolute; inset-inline-start:50%; bottom:100%; margin-inline-start:-17px; margin-bottom:8px; width:34px; display:flex; flex-direction:column; align-items:center; gap:6px; padding:9px 0 11px; border-radius:999px; background:#F0F2F5; border:1px solid var(--line); color:var(--primary); opacity:0; transform:translateY(8px); transition:opacity .12s, transform .12s; pointer-events:none; }
+  .lockcue::before { content:"\2191"; }
+  .lockcue s { width:11px; height:9px; border:2px solid currentColor; border-radius:2px; }
+  .hint { font-size:11.5px; color:var(--muted); text-align:center; }
+
+  .overlay { position:absolute; inset:0; z-index:20; display:none; flex-direction:column; padding:26px 22px 200px; padding-top:max(26px, env(safe-area-inset-top)); background:rgba(18,24,31,.94); color:#fff; pointer-events:none; }
+  .overlay[data-open="1"] { display:flex; }
+  .overlay .lede { display:flex; align-items:center; gap:9px; font-size:12px; font-family:'IBM Plex Mono',monospace; color:var(--record); letter-spacing:.6px; }
+  .overlay .lede i { width:8px; height:8px; border-radius:50%; background:var(--record); }
+  .heard { flex:1; overflow-y:auto; padding:26px 0; font-size:23px; line-height:1.42; }
+  .heard em { color:rgba(255,255,255,.5); font-style:normal; }
+  .blast { position:relative; height:186px; display:grid; place-items:center; margin-bottom:10px; }
+  .blast span { position:absolute; width:96px; height:96px; border-radius:50%; border:1.5px solid var(--record); transition:transform .08s linear, opacity .12s linear; }
+  .blast span.fill { border:0; background:rgba(219,39,119,.2); }
+  .blast .core { position:relative; width:72px; height:72px; border:0; border-radius:50%; background:var(--record); display:grid; place-items:center; cursor:pointer; pointer-events:auto; transition:transform .07s linear; }
+  .stopwide { pointer-events:auto; display:flex; align-items:center; justify-content:center; gap:10px; width:100%; padding:15px; margin-bottom:14px; border:0; border-radius:16px; background:var(--record); color:#fff; font-size:15px; font-weight:600; cursor:pointer; }
+  .stopwide s { width:13px; height:13px; border-radius:3px; background:#fff; }
+  .overlay .foot { text-align:center; font-size:12.5px; color:rgba(255,255,255,.55); }
+
+  .scrim { position:absolute; inset:0; z-index:30; display:none; }
+  .scrim[data-open="1"] { display:flex; }
+  .scrim .veil { position:absolute; inset:0; background:rgba(18,24,31,.42); }
+  aside { position:relative; width:80%; max-width:310px; height:100%; background:#fff; display:flex; flex-direction:column; box-shadow:0 0 40px rgba(18,24,31,.22); animation:fadeUp .16s ease-out; }
+  aside .top { padding:20px 18px 14px; padding-top:max(24px, env(safe-area-inset-top)); border-bottom:1px solid #E3E6EA; }
+  .label { font-size:11px; letter-spacing:1.2px; color:var(--muted); font-family:'IBM Plex Mono',monospace; }
+  .newchat { width:100%; margin-top:12px; padding:11px; border:1px dashed #CBD2D9; border-radius:12px; background:#F8F9FB; color:var(--primary); font-size:13.5px; font-weight:600; cursor:pointer; }
+  .chats { flex:1; min-height:0; overflow-y:auto; padding:8px; }
+  .chat { display:flex; align-items:flex-start; gap:10px; padding:11px 12px; border-radius:12px; cursor:pointer; }
+  .chat:hover { background:#F0F2F5; }
+  .chat i { flex:0 0 auto; width:6px; height:6px; margin-top:7px; border-radius:50%; background:#CBD2D9; }
+  .chat[data-active="1"] i { background:var(--record); }
+  .chat b { display:block; font-size:13.5px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .chat em { font-size:11px; color:var(--muted); font-family:'IBM Plex Mono',monospace; font-style:normal; }
+  .chat .del { border:0; background:transparent; color:#9AA5B1; font-size:14px; cursor:pointer; }
+  .chat .del::before { content:"\00D7"; }
+  aside .bottom { padding:14px 18px 20px; border-top:1px solid #E3E6EA; display:flex; flex-direction:column; gap:12px; }
+  aside label { display:flex; flex-direction:column; gap:6px; }
+  aside select { padding:9px 10px; border:1px solid var(--line); border-radius:10px; background:#F8F9FB; font-size:13.5px; }
+  .privacy { font-size:10.5px; line-height:1.45; color:var(--muted); }
+
+  /* carmind's additions, on the same tokens */
+  .chat .body { flex:1; min-width:0; }
+  .chat .exp { border:0; background:transparent; color:#9AA5B1; font-size:14px; cursor:pointer; }
+  .chat .exp::before { content:"\2193"; }
+  .chat .del:disabled, .chat .exp:disabled { opacity:.35; cursor:default; }
+  .chat .tag { margin-inline-start:6px; font-size:11px; color:var(--record); font-family:'IBM Plex Mono',monospace; }
+  .extra { flex:1; min-height:0; overflow-y:auto; padding:14px 18px; border-top:1px solid #E3E6EA; display:flex; flex-direction:column; gap:18px; }
+  .extra [hidden] { display:none; }
+  .extra section { display:flex; flex-direction:column; gap:8px; }
+  .extra label { font-size:12.5px; font-weight:600; }
+  aside input[type="tel"], aside input[type="text"], aside input[type="password"] { width:100%; padding:9px 10px; border:1px solid var(--line); border-radius:10px; background:#F8F9FB; font-size:13.5px; }
+  aside label.check { flex-direction:row; align-items:center; gap:8px; }
+  .extra p { margin:0; font-size:12px; line-height:1.45; color:var(--muted); }
+  #customer-card { font-size:12.5px; line-height:1.55; background:#F8F9FB; border-radius:10px; padding:8px 10px; }
+  #customer-card:empty { display:none; }
+  #customer-card span { color:var(--muted); display:inline-block; min-width:70px; }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; }
+  .example, .extra button { display:flex; align-items:center; gap:6px; padding:4px 10px; border:1px solid var(--line); border-radius:999px; background:#fff; color:var(--primary); font-size:11.5px; font-weight:600; text-align:start; cursor:pointer; }
+  .extra button:disabled { opacity:.45; cursor:default; }
+  .notice button { margin-top:6px; padding:4px 10px; border:1px solid #B7DFDA; border-radius:999px; background:#fff; color:var(--primary); font-size:11.5px; font-weight:600; cursor:pointer; }
+  .badge { display:inline-block; margin-bottom:6px; padding:2px 9px; border-radius:999px; font-size:12px; font-weight:700; background:#f2f4f7; color:#475467; }
+  .row[data-status="not_drivable"] .badge { background:#fef3f2; color:#b42318; }
+  .row[data-status="drivable_caution"] .badge { background:#fffaeb; color:#b54708; }
+  .row[data-status="drivable"] .badge { background:#ecfdf3; color:#067647; }
+  .row[data-status="unclear"] .badge, .row[data-status="unsupported"] .badge { background:#f2f4f7; color:#475467; }
+  .badge + .reply { display:block; }
+  details.more { max-width:84%; font-size:10.5px; line-height:1.5; color:var(--muted); font-family:'IBM Plex Mono',monospace; }
+  details.more summary { cursor:pointer; }
+  details.more > div { margin-top:6px; color:var(--ink); }
+  details.more b { display:block; font-weight:500; color:var(--muted); }
+  details.more ol, details.more ul { margin:4px 0 0; padding-inline-start:18px; }
+
+  @keyframes bar { 0%,100% { transform:scaleY(.25) } 50% { transform:scaleY(1) } }
+  @keyframes blink { 0%,100% { opacity:.25 } 50% { opacity:1 } }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(6px) } to { opacity:1; transform:none } }
+  @keyframes bounce { 0%,100% { transform:translateY(0) } 50% { transform:translateY(-8px) } }
+  .bounce { animation:bounce 1.9s ease-in-out infinite; }
+</style>
+</head>
+<body>
+<div id="app" dir="ltr">
+  <header>
+    <button class="icon-btn" id="menu" type="button"><i></i><i></i><i></i></button>
+    <div class="title"><b id="product"></b><span id="status"></span></div>
+    <button class="ghost" id="new" type="button"></button>
+  </header>
+
+  <main id="thread"></main>
+  <div class="notice" id="boot-failed">The service is unavailable. Reload the page to try again.</div>
+  <div class="notice" id="error" hidden></div>
+
+  <footer>
+    <div class="compose">
+      <textarea id="problem" rows="1" maxlength="4000"></textarea>
+      <button class="send" id="ask" type="button" disabled></button>
+    </div>
+    <div class="mic-wrap">
+      <div class="mic-slot">
+        <div class="lockcue" id="lockcue"><s></s></div>
+        <button class="mic" id="mic" type="button" disabled><span class="stem"></span></button>
+      </div>
+      <div class="hint" id="hint"></div>
+    </div>
+  </footer>
+
+  <div class="overlay" id="overlay">
+    <div class="lede" dir="ltr"><i></i><span id="lede"></span></div>
+    <div class="heard" id="heardBox"></div>
+    <div class="blast">
+      <span id="ring3"></span><span id="ring2"></span><span class="fill" id="ring1"></span>
+      <button class="core" id="core" type="button"><span class="stem"></span></button>
+    </div>
+    <button class="stopwide" id="stopwide" type="button" hidden><s></s></button>
+    <div class="foot" id="overlayFoot"></div>
+  </div>
+
+  <div class="scrim" id="scrim">
+    <div class="veil" id="veil"></div>
+    <aside>
+      <div class="top"><div class="label" data-copy="conversations_label"></div><button class="newchat" id="newDrawer" type="button"></button></div>
+      <div class="chats" id="chats"></div>
+      <div class="extra">
+        <section id="call">
+          <div class="label" data-copy="call_label"></div>
+          <label for="customer" data-copy="customer_label"></label>
+          <select id="customer"></select>
+          <label for="caller" data-copy="caller_label"></label>
+          <input type="tel" id="caller" maxlength="40" autocomplete="off">
+          <div id="customer-card"></div>
+          <label for="plate" data-copy="plate_label"></label>
+          <input type="text" id="plate" maxlength="40" autocomplete="off">
+          <label class="check" id="after-hours-label" for="after-hours"><input type="checkbox" id="after-hours"><span data-copy="after_hours"></span></label>
+          <p id="locked" hidden></p>
+        </section>
+        <section id="examples">
+          <div class="label" data-copy="examples_label"></div>
+          <div class="chips">
+            <button type="button" class="example"></button>
+            <button type="button" class="example"></button>
+            <button type="button" class="example"></button>
+            <button type="button" class="example"></button>
+            <button type="button" class="example"></button>
+          </div>
+        </section>
+        <section id="saves">
+          <div class="label" data-copy="saves_label"></div>
+          <p id="saves-state"></p>
+          <input type="password" id="pass" autocomplete="new-password">
+          <input type="password" id="pass2" autocomplete="new-password">
+          <p id="pass-warning"></p>
+          <button type="button" id="set-pass"></button>
+          <button type="button" id="unlock"></button>
+          <button type="button" id="force" hidden></button>
+          <p id="locked-count" hidden></p>
+          <p id="damaged-count" hidden></p>
+          <button type="button" id="import"></button>
+          <input type="file" id="import-file" accept=".json,application/json" hidden>
+          <div id="import-row" hidden>
+            <input type="password" id="import-pass" autocomplete="off">
+            <button type="button" id="import-go"></button>
+          </div>
+        </section>
+      </div>
+      <div class="bottom">
+        <label><span class="label" data-copy="language_label"></span><select id="lang"></select></label>
+        <div class="privacy" id="privacy"></div>
+      </div>
+    </aside>
+  </div>
+</div>
+<script src="/app.js"></script>
+</body>
+</html>
