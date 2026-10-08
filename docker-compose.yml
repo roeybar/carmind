@@ -1,0 +1,127 @@
+name: carmind
+
+x-carmind: &carmind
+  build: ./serve
+  image: carmind:latest
+  mem_limit: 512m
+  environment: &carmind-env
+    CARMIND_KB_DIR: /kb
+    LUNA_MODE: "off"
+  volumes:
+    - ./knowledge:/kb/knowledge:ro
+    - ./schema:/kb/schema:ro
+
+services:
+  app:
+    <<: *carmind
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      <<: *carmind-env
+      CARMIND_MCP_URL: http://mcp:7601/mcp
+      LUNA_MODE: "${LUNA_MODE:-on}"
+    ports:
+      - "127.0.0.1:7600:7600"
+    # Chromium forces https for the bare host "app" (the .app TLD is HSTS-preloaded), so the
+    # browser e2e reaches the service under this alias.
+    networks:
+      default:
+        aliases:
+          - carmind-app
+    depends_on:
+      - mcp
+    restart: unless-stopped
+
+  mcp:
+    <<: *carmind
+    command: ["python", "-m", "app.mcp_server"]
+    restart: unless-stopped
+
+  test:
+    <<: *carmind
+    profiles: [test]
+    environment:
+      <<: *carmind-env
+      CARMIND_PROVIDER: fake
+    working_dir: /app
+    volumes:
+      - ./knowledge:/kb/knowledge:ro
+      - ./schema:/kb/schema:ro
+      - ./serve/app:/app/app:ro
+      - ./serve/tests:/app/tests:ro
+      - ./.env.example:/app/env.example:ro
+    command: ["python", "-m", "pytest", "-p", "no:cacheprovider", "-v", "tests"]
+
+  lint:
+    <<: *carmind
+    profiles: [test]
+    working_dir: /repo
+    volumes:
+      - ./serve:/repo/serve
+      - ./tools:/repo/tools
+      - ./ruff.toml:/repo/ruff.toml:ro
+    command: ["ruff", "check", "--no-cache", "serve", "tools"]
+
+  tools-test:
+    image: python:3.12-slim
+    profiles: [tools]
+    mem_limit: 512m
+    working_dir: /tools
+    environment:
+      PYTHONDONTWRITEBYTECODE: "1"
+    volumes:
+      - ./tools:/tools:ro
+    command:
+      - sh
+      - -c
+      - >-
+        apt-get update -qq
+        && apt-get install -y -qq --no-install-recommends git curl > /dev/null
+        && pip install -q --root-user-action=ignore --disable-pip-version-check "pytest==8.*"
+        && python -m pytest -p no:cacheprovider -v /tools
+
+  e2e:
+    <<: *carmind
+    profiles: [e2e]
+    environment:
+      <<: *carmind-env
+      SERVE_URL: http://app:7600
+      CARMIND_MCP_URL: http://mcp:7601/mcp
+    volumes:
+      - ./serve/tests:/app/tests:ro
+    depends_on:
+      - app
+      - mcp
+    command: ["python", "/app/tests/e2e_http.py"]
+
+  ui-e2e:
+    image: mcr.microsoft.com/playwright:v1.63.0-noble
+    profiles: [e2e]
+    mem_limit: 1g
+    environment:
+      SERVE_URL: http://carmind-app:7600
+    volumes:
+      - ./serve/tests/ui_e2e.mjs:/e2e/ui_e2e.mjs:ro
+      - ./serve/tests/ui_e2e_speech.mjs:/e2e/ui_e2e_speech.mjs:ro
+      - ./serve/tests/ui_e2e_saves.mjs:/e2e/ui_e2e_saves.mjs:ro
+    depends_on:
+      - app
+    command:
+      - sh
+      - -c
+      - mkdir -p /work && cp /e2e/ui_e2e*.mjs /work/ && cd /work && npm install --no-save --no-audit --no-fund --loglevel=error playwright@1.63.0 && node ui_e2e.mjs
+
+  stress:
+    <<: *carmind
+    profiles: [stress]
+    environment:
+      <<: *carmind-env
+      SERVE_URL: http://app:7600
+      CARMIND_MCP_URL: http://mcp:7601/mcp
+    volumes:
+      - ./serve/tests:/app/tests:ro
+    depends_on:
+      - app
+      - mcp
+    command: ["python", "/app/tests/stress.py"]
