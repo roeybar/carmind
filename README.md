@@ -43,6 +43,21 @@ Open http://127.0.0.1:7600. The menu button at the start of the header opens the
 
 Open it on the computer that runs it: dictation and browser saves need a secure page, and the compose file publishes the service on this computer only. The page is laid out for phone-sized screens too (try your browser's device emulation).
 
+## Run the image
+
+The release image carries the service, the knowledge base and the schema:
+
+```
+docker pull ghcr.io/roeybar/carmind:1.0.0
+docker run --rm -p 127.0.0.1:7600:7600 ghcr.io/roeybar/carmind:1.0.0
+```
+
+Open http://127.0.0.1:7600. Run on its own, the app calls the tools in-process. It uses the fake provider unless `CARMIND_PROVIDER` is set; a real provider also needs its key and model id, and without them the reply carries the deterministic verdict and an `error`. The constrained choices are off unless `LUNA_MODE=on` (the compose demo turns them on). Pass these with `-e` or with `--env-file .env`. The same image runs the MCP server, with the command compose uses for the mcp service; its tools are then at http://127.0.0.1:7601/mcp:
+
+```
+docker run --rm -p 127.0.0.1:7601:7601 ghcr.io/roeybar/carmind:1.0.0 python -m app.mcp_server
+```
+
 ## Configuration
 
 Optional. Copy `.env.example` to `.env` and set:
